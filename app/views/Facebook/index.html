@@ -1,0 +1,46 @@
+#{extends 'main.html' /} 
+#{set title:'Facebook' /} 
+
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '305420729478595', // App ID
+      channelUrl : '//warm-autumn-6309.herokuapp.com:9000/Facebook/channel', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      oauth      : true, // enable OAuth 2.0
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     d.getElementsByTagName('head')[0].appendChild(js);
+   }(document));
+</script>
+
+<a href="https://www.facebook.com/dialog/oauth?client_id=305420729478595&redirect_uri=https://warm-autumn-6309.herokuapp.com/Facebook/index">Log in to Facebook (again)</a><br/>
+<a id="facebookPhotos" href="https://graph.facebook.com/fql?q=SELECT+name+FROM+user+WHERE+uid+=+me()">My Facebook photos</a><br/>
+<a id="facebookPhotos2" href="#">My Facebook photos 2</a><br/>
+
+<div id="echo"></div>
+
+<script type="text/javascript" charset="utf-8">	
+<!--
+	$('#"facebookPhotos2"').click(function() {
+		$.get('https://graph.facebook.com/fql?q=SELECT+name+FROM+user+WHERE+uid+=+me()', function(echo) {
+			$('#echo').append(
+				'<span>echo: '+echo+'</span>'
+			)
+		})
+	});
+-->
+</script>
+
+
