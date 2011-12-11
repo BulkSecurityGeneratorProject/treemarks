@@ -8,9 +8,14 @@ public class Facebook extends Controller {
 	public static final String APP_ID = "259176644136057";
 	public static final String APP_SECRET = "a465e617d556c8ee0a34359129e259cf";
 
-	public static void canvas() {
+	public static void index() {
 		render();
 	}
+	
+	public static void canvas() {
+		redirect("https://www.facebook.com/dialog/oauth?client_id="+APP_ID+"&redirect_uri=http://hollow-stream-9914.herokuapp.com/Facebook/index");
+	}
+
 	
 	public static void tabread() {
 		render();
