@@ -11,7 +11,9 @@ import play.db.jpa.Model;
 public class User extends Model {
 
 	public String username;
+	
 	public String secret;
+	
 	public String token;
 	
 	public Group rootGroup;

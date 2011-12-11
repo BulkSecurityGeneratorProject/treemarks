@@ -12,9 +12,17 @@ import play.db.jpa.Model;
 public class Resource extends Model {
 
 	public String url;
+	
+	public String title;
+	
 	public String description;
+	
 	@ManyToMany
 	public Set<Group> groups;
+
 	@ManyToOne
 	public Category category;
+
+	@ManyToOne
+	public User user;
 }

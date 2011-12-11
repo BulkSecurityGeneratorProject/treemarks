@@ -25,3 +25,28 @@
    }(document));
 </script>
 
+<strong>Your TreeMarks:</strong><br/>
+
+#{ifnot resources}
+   No TreeMarks yet
+#{/ifnot}
+
+<ul id="resources">
+	#{list items:resources, as:'resource'}
+	<li><a href="${resource.url}">${resource.title}</a></li> 
+	#{/list}
+</ul>
+
+<a id="addResource" href="#">Add TreeMark</a>
+
+<script type="text/javascript" charset="utf-8">	
+<!--
+$('#addResource').click(function() {
+	$.post('@{addResource()}', {url: prompt('URL:')}, function(resource) {
+		$('#resources').append(
+			'<li><a href="'+ resource.url + '">' + resource.title + '</a></li>'
+		)
+	})
+});
+-->
+</script>
