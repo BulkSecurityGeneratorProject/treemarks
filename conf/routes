@@ -4,8 +4,7 @@
 
 # Home page
 GET     /                                       Application.index
-GET     /flickr                                 Flickr.index
-POST    /flickr                                 Flickr.index
+POST    /facebook                               Facebook.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
