@@ -14,6 +14,8 @@ public class User extends Model {
 	public String secret;
 	public String token;
 	
+	public Group rootGroup;
+	
 	public User(String username) {
 		this.username = username;
 	}
