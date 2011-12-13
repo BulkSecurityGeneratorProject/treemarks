@@ -1,4 +1,34 @@
-#{extends 'main.html' /}
-#{set title:'Home' /}
+#{extends 'main.html' /} 
+#{set title:'Facebook' /} 
 
-#{welcome /}
+<p>Do you lose track of your bookmarks? Organise them here in a directory structure, just like the files on your computer.</p>
+
+<div>
+<strong>Your TreeMarks:</strong><br/>
+
+<em>
+#{ifnot resources}
+   No TreeMarks yet
+#{/ifnot}
+</em>
+
+<ul id="resources">
+	#{list items:resources, as:'resource'}
+	<li><a href="${resource.url}">${resource.title}</a></li> 
+	#{/list}
+</ul>
+
+<a id="addResource" href="#">Add TreeMark</a>
+
+<script type="text/javascript" charset="utf-8">	
+<!--
+$('#addResource').click(function() {
+	$.post('@{addResource()}', {url: prompt('URL:')}, function(resource) {
+		$('#resources').append(
+			'<li><a href="'+ resource.url + '">' + resource.title + '</a></li>'
+		)
+	})
+});
+-->
+</script>
+</div>
