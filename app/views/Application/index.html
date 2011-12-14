@@ -8,7 +8,7 @@
 
 <em>
 #{ifnot resources}
-   No TreeMarks yet
+   No TreeMarks
 #{/ifnot}
 </em>
 
@@ -18,7 +18,23 @@
 	#{/list}
 </ul>
 
+<strong>Groups:</strong><br/>
+
+<em>
+#{ifnot groups}
+   No Groups
+#{/ifnot}
+</em>
+
+<ul id="groups">
+	#{list items:groups, as:'group'}
+	<li><a href=groups/"${group.id}">${group.name}</a></li> 
+	#{/list}
+</ul>
+
 <a id="addResource" href="#">Add TreeMark</a>
+
+<a id="addGroup" href="#">Add Group</a>
 
 <script type="text/javascript" charset="utf-8">	
 <!--
@@ -26,6 +42,14 @@ $('#addResource').click(function() {
 	$.post('@{addResource()}', {url: prompt('URL:')}, function(resource) {
 		$('#resources').append(
 			'<li><a href="'+ resource.url + '">' + resource.title + '</a></li>'
+		)
+	})
+});
+
+$('#addGroup').click(function() {
+	$.post('@{addGroup()}', {name: prompt('Name:')}, function(group) {
+		$('#groups').prepend(
+			'<li><a href=groups/"'+ group.id + '">' + group.name + '</a></li>'
 		)
 	})
 });
