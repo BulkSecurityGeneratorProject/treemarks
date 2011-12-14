@@ -26,7 +26,7 @@
 
 <ul id="groups">
 	#{list items:groups, as:'group'}
-	<li><a href=groups/"${group.id}">${group.name}</a></li> 
+	<li><a href="groups/${group.id.toInteger()}">${group.name}</a></li> 
 	#{/list}
 </ul>
 
@@ -47,7 +47,7 @@ $('#addResource').click(function() {
 $('#addGroup').click(function() {
 	$.post('@{addGroup()}', {name: prompt('Name:')}, function(group) {
 		$('#groups').prepend(
-			'<li><a href=groups/"'+ group.id + '">' + group.name + '</a></li>'
+			'<li><a href="groups/'+ parseInt(group.id) + '">' + group.name + '</a></li>'
 		)
 	})
 });

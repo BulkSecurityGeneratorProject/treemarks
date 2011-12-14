@@ -15,8 +15,15 @@ public class Application extends Controller {
 	public static final String HTTP = "http://";
 
 	public static void index() {
+		List<Group> groups = Group.find("order by created desc").fetch();
 		List<Resource> resources = Resource.find("order by created desc").fetch();
-		render(resources);
+		render(groups, resources);
+	}
+	
+	public static void listGroup(long groupId) {
+		Group group = Group.findById(groupId);
+		List<Resource> resources = Resource.find(":group member of resource.groups order by created desc", group).fetch();
+		renderJSON(resources);
 	}
 
 	public static void addResource(String url) {
@@ -39,6 +46,7 @@ public class Application extends Controller {
 		if (isText(name)) {
 			Group group = new Group();
 			group.name = name;
+			group.created = new LocalDateTime();
 			group.save();
 			renderJSON(group);
 		} else {

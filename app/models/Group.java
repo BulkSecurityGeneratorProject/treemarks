@@ -7,6 +7,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDateTime;
+
 import play.db.jpa.Model;
 
 @Entity
@@ -20,4 +23,7 @@ public class Group extends Model {
 
 	@ManyToOne
 	public User user;
+	
+	@Type(type="org.joda.time.contrib.hibernate.PersistentLocalDateTime")
+	public LocalDateTime created;
 }

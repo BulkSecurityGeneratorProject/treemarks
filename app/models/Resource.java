@@ -23,10 +23,6 @@ public class Resource extends Model {
 	
 	public String description;
 	
-	 @Type(type="org.joda.time.contrib.hibernate.PersistentLocalDateTime")
-//	@Temporal(TemporalType.TIMESTAMP)
-	public LocalDateTime created;
-	
 	@ManyToMany
 	public Set<Group> groups;
 
@@ -35,4 +31,7 @@ public class Resource extends Model {
 
 	@ManyToOne
 	public User user;
+	
+	@Type(type="org.joda.time.contrib.hibernate.PersistentLocalDateTime")
+	public LocalDateTime created;
 }
