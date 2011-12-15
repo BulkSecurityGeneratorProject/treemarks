@@ -22,7 +22,7 @@ public class Application extends Controller {
 	
 	public static void listGroup(long groupId) {
 		Group group = Group.findById(groupId);
-		List<Resource> resources = Resource.find(":group member of resource.groups order by created desc", group).fetch();
+		List<Resource> resources = Resource.find("select distinct r from Resource r join r.groups g where g.id = :groupid").bind("groupid", groupId).fetch();
 		renderJSON(resources);
 	}
 
