@@ -1,0 +1,20 @@
+16 Dec 2011 07:02:12,714 INFO  ~ Starting /home/jeroen/workspaces/play/treemarks
+16 Dec 2011 07:02:13,361 WARN  ~ You're running Play! in DEV mode
+16 Dec 2011 07:02:13,447 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+16 Dec 2011 07:02:22,372 INFO  ~ Connected to jdbc:h2:mem:play;MODE=MYSQL;LOCK_MODE=0
+16 Dec 2011 07:02:23,815 INFO  ~ Application 'TreeMarks' is now started !
+16 Dec 2011 07:12:34,120 INFO  ~ Connected to jdbc:postgresql://localhost/treemarks
+16 Dec 2011 07:12:35,738 ERROR ~ 
+
+@68m06b6l8
+Facebook.index action not found
+
+Action not found
+Action Facebook.index could not be found. Error raised is No method public static void index() was found in class controllers.Facebook
+
+play.exceptions.ActionNotFoundException: Action Facebook.index not found
+	at play.mvc.ActionInvoker.getActionMethod(ActionInvoker.java:601)
+	at play.mvc.ActionInvoker.resolve(ActionInvoker.java:85)
+	at Invocation.HTTP Request(Play!)
+Caused by: java.lang.Exception: No method public static void index() was found in class controllers.Facebook
+	... 3 more
