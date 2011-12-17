@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.google.gson.JsonElement;
+
 import models.Resource;
 import play.Logger;
 import play.libs.WS;
@@ -36,8 +38,9 @@ public class Facebook extends Controller {
 			if (matcher.matches()) {
 				String accessToken = matcher.group(1);
 				String expires = matcher.group(2);
-//				render(code, accessToken, expires);
-				redirect("https://graph.facebook.com/me?access_token="+accessToken);
+				HttpResponse userInfoResponse = WS.url("https://graph.facebook.com/me?access_token="+accessToken).get();
+				JsonElement userInfo = userInfoResponse.getJson();
+				render(userInfo, code, accessToken, expires);
 			}
 		} else {
 			redirect("Application.index");
