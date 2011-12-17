@@ -1,6 +1,9 @@
 package controllers;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import models.Group;
 import models.Resource;
@@ -9,10 +12,6 @@ import models.User;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDateTime;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import play.db.jpa.JPABase;
 import play.mvc.Controller;
 
 public class Application extends Controller {
@@ -26,17 +25,19 @@ public class Application extends Controller {
 		render(rootGroup);
 	}
 	
-	public static void listGroup(long groupId) {
-		List<Group> subGroups = Resource.find("select distinct g from Group g join g.parents p where p.id = :groupid order by created desc").bind("groupid", groupId).fetch();
-		List<Resource> resources = Resource.find("select distinct r from Resource r join r.groups g where g.id = :groupid").bind("groupid", groupId).fetch();
-		JsonObject aggregate = new JsonObject();
-		aggregate.add("subgroups", new Gson().toJsonTree(subGroups));
-		aggregate.add("resources", new Gson().toJsonTree(resources));
-		renderJSON(aggregate);
+	public static void listSubGroups(long groupId) {
+		List<Group> subgroups = Resource.find("select distinct g from Group g join g.parents p where p.id = :groupid order by g.created desc").bind("groupid", groupId).fetch();
+		renderJSON(subgroups);
 	}
 
-	public static void addResource(String url) {
+	public static void listResources(long groupId) {
+		List<Resource> resources = Resource.find("select distinct r from Resource r join r.groups g where g.id = :groupid").bind("groupid", groupId).fetch();
+		renderJSON(resources);
+	}
+
+	public static void addResource(Long groupId, String url) {
 		if (isText(url)) {
+			Group group = Group.findById(groupId);
 			Resource resource = new Resource();
 			if (!url.startsWith(HTTP)) {
 				url = HTTP + url;
@@ -44,6 +45,8 @@ public class Application extends Controller {
 			resource.url = url;
 			resource.title = url;
 			resource.created = new LocalDateTime();
+			resource.groups = new HashSet<Group>();
+			resource.groups.add(group);
 			resource.save();
 			renderJSON(resource);
 		} else {
@@ -51,11 +54,14 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void addGroup(String name) {
+	public static void addGroup(Long parentGroupId, String name) {
 		if (isText(name)) {
+			Group parent = Group.findById(parentGroupId);
 			Group group = new Group();
 			group.name = name;
 			group.created = new LocalDateTime();
+			group.parents = new HashSet<Group>();
+			group.parents.add(parent);
 			group.save();
 			renderJSON(group);
 		} else {
