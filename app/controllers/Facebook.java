@@ -55,7 +55,7 @@ public class Facebook extends Controller {
 						.getJson();
 				String facebookUsername = facebookUserInfo.get("username")
 						.toString();
-				User user = User.find("where facebookUsername = ?",
+				User user = User.find("facebookUsername = ?",
 						facebookUsername).first();
 				if (user == null) {
 					user = createFacebookUser(facebookUsername);
