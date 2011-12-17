@@ -4,10 +4,15 @@ import java.util.List;
 
 import models.Group;
 import models.Resource;
+import models.User;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDateTime;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import play.db.jpa.JPABase;
 import play.mvc.Controller;
 
 public class Application extends Controller {
@@ -15,15 +20,19 @@ public class Application extends Controller {
 	public static final String HTTP = "http://";
 
 	public static void index() {
-		List<Group> groups = Group.find("order by created desc").fetch();
-		List<Resource> resources = Resource.find("order by created desc").fetch();
-		render(groups, resources);
+		Long userId = Long.valueOf(session.get("userId"));
+		User user = User.findById(userId);
+		Group rootGroup = user.rootGroup;
+		render(rootGroup);
 	}
 	
 	public static void listGroup(long groupId) {
-		Group group = Group.findById(groupId);
+		List<Group> subGroups = Resource.find("select distinct g from Group g join g.parents p where p.id = :groupid order by created desc").bind("groupid", groupId).fetch();
 		List<Resource> resources = Resource.find("select distinct r from Resource r join r.groups g where g.id = :groupid").bind("groupid", groupId).fetch();
-		renderJSON(resources);
+		JsonObject aggregate = new JsonObject();
+		aggregate.add("subgroups", new Gson().toJsonTree(subGroups));
+		aggregate.add("resources", new Gson().toJsonTree(resources));
+		renderJSON(aggregate);
 	}
 
 	public static void addResource(String url) {
