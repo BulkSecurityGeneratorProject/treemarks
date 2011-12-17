@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import models.Resource;
 import play.Logger;
@@ -39,8 +40,10 @@ public class Facebook extends Controller {
 				String accessToken = matcher.group(1);
 				String expires = matcher.group(2);
 				HttpResponse userInfoResponse = WS.url("https://graph.facebook.com/me?access_token="+accessToken).get();
-				JsonElement userInfo = userInfoResponse.getJson();
-				render(userInfo, code, accessToken, expires);
+				JsonObject userInfo = (JsonObject) userInfoResponse.getJson();
+				String facebookUsername = userInfo.get("username").toString();
+				session.put("facebookUsername", facebookUsername);
+				render(facebookUsername, userInfo, code, accessToken, expires);
 			}
 		} else {
 			redirect("Application.index");
