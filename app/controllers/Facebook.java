@@ -36,9 +36,9 @@ public class Facebook extends Controller {
 			if (matcher.matches()) {
 				String accessToken = matcher.group(1);
 				String expires = matcher.group(2);
-				render(code, accessToken, expires);
+//				render(code, accessToken, expires);
+				redirect("https://graph.facebook.com/me?access_token="+accessToken);
 			}
-//			"https://graph.facebook.com/me?access_token="
 		} else {
 			redirect("Application.index");
 		}
