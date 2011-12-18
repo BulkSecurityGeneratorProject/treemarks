@@ -36,23 +36,13 @@ $('#addGroup').click(function() {
 	})
 });
 
-$('#loadGroup').click(function() { $.loadGroup() });
+$('#loadGroup').click($.loadGroup());
 
 $.loadGroup = function() {
 	$.post('@{listSubGroups()}', {groupId: currentGroup}, function(subgroups) {
-		$('#subgroups').empty();
 		$.each(subgroups, function(index, subgroup) {
 			$('#subgroups').append(
 					'<div><a href="javascript:$.openGroup('+subgroup.id+')">' + subgroup.name + '</a></div>'
-			)
-		})
-	})
-	$.post('@{listResources()}', {groupId: currentGroup}, function(resources) {
-		alert('incoming resources: '+currentGroup);
-		$('#treemarks').empty();
-		$.each(resources, function(index, resource) {
-			$('#treemarks').append(
-					'<div><a href="javascript:$.openResource('+resource.id+')">' + resource.title + '</a></div>'
 			)
 		})
 	})
@@ -61,12 +51,11 @@ $.loadGroup = function() {
 $.openGroup = function (groupId) {
 	alert('Opening group: ' + groupId);
 	currentGroup = groupId;
-	$.loadGroup()
 }
 
-$(document).ready(function() {
-	 $.loadGroup();
-});
+// $(document).ready(function() {
+// 	 $.loadGroup();
+// });
 
 </script>
 </div>
