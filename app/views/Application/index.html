@@ -14,8 +14,6 @@
 
 <a id="addGroup" href="#">Add Group</a>
 
-<a id="loadGroup" href="#">Load Group</a>
-
 <script type="text/javascript" charset="utf-8">	
 <!--
 var currentGroup = ${rootGroup.id.toInteger()};
@@ -35,8 +33,6 @@ $('#addGroup').click(function() {
 		)
 	})
 });
-
-$('#loadGroup').click(function() { $.loadGroup() });
 
 $.loadGroup = function() {
 	$.post('@{listSubGroups()}', {groupId: currentGroup}, function(subgroups) {
