@@ -48,7 +48,6 @@ $.loadGroup = function() {
 		})
 	})
 	$.post('@{listResources()}', {groupId: currentGroup}, function(resources) {
-		alert('incoming resources: '+currentGroup);
 		$('#treemarks').empty();
 		$.each(resources, function(index, resource) {
 			$('#treemarks').append(
@@ -59,7 +58,6 @@ $.loadGroup = function() {
 }
 
 $.openGroup = function (groupId) {
-	alert('Opening group: ' + groupId);
 	currentGroup = groupId;
 	$.loadGroup()
 }
