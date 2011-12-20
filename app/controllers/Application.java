@@ -1,5 +1,8 @@
 package controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +12,7 @@ import models.Group;
 import models.Resource;
 import models.User;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDateTime;
 
@@ -19,10 +23,20 @@ public class Application extends Controller {
 	public static final String HTTP = "http://";
 
 	public static void index() {
-		Long userId = Long.valueOf(session.get("userId"));
-		User user = User.findById(userId);
-		Group rootGroup = user.rootGroup;
-		render(rootGroup);
+		String userIdString = session.get("userId");
+		if (!StringUtils.isEmpty(userIdString)) {
+			Long userId = Long.valueOf(userIdString);
+			User user = User.findById(userId);
+			Group rootGroup = user.rootGroup;
+			render(rootGroup);
+		} else {
+			render("@Application.login");
+		}
+	}
+
+	public static void logout() {
+		session.remove("userId");
+		render("@Application.login");
 	}
 	
 	public static void listSubGroups(long groupId) {
@@ -33,6 +47,17 @@ public class Application extends Controller {
 	public static void listResources(long groupId) {
 		List<Resource> resources = Resource.find("select distinct r from Resource r join r.groups g where g.id = :groupid").bind("groupid", groupId).fetch();
 		renderJSON(resources);
+	}
+	
+	public static void getAsFirefoxBackup() {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		InputStream resource = Application.class.getResourceAsStream("bookmarks-2011-12-18.json");
+		try {
+			IOUtils.copy(resource, baos);
+			renderJSON(baos.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static void addResource(Long groupId, String url) {
