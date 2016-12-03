@@ -24,10 +24,10 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/treemarks
+        url: jdbc:postgresql://192.168.1.21:5432/treemarks
         name:
         username: treemarks
-        password:
+        password: treemarks
     jpa:
         database-platform: com.treemarks.app.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL
