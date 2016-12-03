@@ -2,6 +2,7 @@ package com.treemarks.app.service;
 
 import com.treemarks.app.domain.Category;
 import com.treemarks.app.repository.CategoryRepository;
+import com.treemarks.app.triplestore.TripleStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,12 @@ import java.util.List;
 public class CategoryService {
 
     private final Logger log = LoggerFactory.getLogger(CategoryService.class);
-    
+
     @Inject
     private CategoryRepository categoryRepository;
+
+    @Inject
+    private TripleStore tripleStore;
 
     /**
      * Save a category.
@@ -31,15 +35,16 @@ public class CategoryService {
     public Category save(Category category) {
         log.debug("Request to save Category : {}", category);
         Category result = categoryRepository.save(category);
+        tripleStore.saveCategory(category);
         return result;
     }
 
     /**
      *  Get all the categories.
-     *  
+     *
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<Category> findAll() {
         log.debug("Request to get all Categories");
         List<Category> result = categoryRepository.findAllWithEagerRelationships();
@@ -53,7 +58,7 @@ public class CategoryService {
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Category findOne(Long id) {
         log.debug("Request to get Category : {}", id);
         Category category = categoryRepository.findOneWithEagerRelationships(id);
