@@ -13,6 +13,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
+    @Query("select category from Category category where category.owner.login = ?#{principal.username}")
+    List<Category> findByOwnerIsCurrentUser();
+
     @Query("select distinct category from Category category left join fetch category.parents")
     List<Category> findAllWithEagerRelationships();
 

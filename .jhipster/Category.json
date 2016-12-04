@@ -8,6 +8,16 @@
             "otherEntityField": "name",
             "ownerSide": true,
             "otherEntityRelationshipName": "child"
+        },
+        {
+            "relationshipName": "owner",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "login",
+            "ownerSide": true
         }
     ],
     "fields": [
@@ -24,6 +34,15 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "iri",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "^.+:.+$"
         }
     ],
     "changelogDate": "20161203172157",

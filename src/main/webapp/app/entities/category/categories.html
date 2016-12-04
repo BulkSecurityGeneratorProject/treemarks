@@ -21,7 +21,9 @@
                     <th><span data-translate="global.field.id">ID</span></th>
                     <th><span data-translate="treemarksApp.category.uri">Uri</span></th>
                     <th><span data-translate="treemarksApp.category.name">Name</span></th>
+                    <th><span data-translate="treemarksApp.category.iri">Iri</span></th>
                     <th><span data-translate="treemarksApp.category.parent">Parent</span></th>
+                    <th><span data-translate="treemarksApp.category.owner">Owner</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,10 +32,14 @@
                     <td><a ui-sref="category-detail({id:category.id})">{{category.id}}</a></td>
                     <td>{{category.uri}}</td>
                     <td>{{category.name}}</td>
+                    <td>{{category.iri}}</td>
                     <td>
                         <span ng-repeat="parent in category.parents">
                             <a class="form-control-static" ui-sref="category-detail({id: parent.id})">{{parent.name}}</a>{{$last ? '' : ', '}}
                         </span>
+                    </td>
+                    <td>
+                        {{category.owner.login}}
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">

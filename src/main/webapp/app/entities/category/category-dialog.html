@@ -37,10 +37,38 @@
                 </p>
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="treemarksApp.category.iri" for="field_iri">Iri</label>
+            <input type="text" class="form-control" name="iri" id="field_iri"
+                    ng-model="vm.category.iri"
+                    required ng-pattern="/^.+:.+$/" />
+            <div ng-show="editForm.iri.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.iri.$error.required" data-translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.iri.$error.pattern" data-translate="entity.validation.pattern" translate-value-pattern="^.+:.+$">
+                    This field should follow pattern "^.+:.+$".
+                </p>
+            </div>
+        </div>
 
         <div class="form-group">
             <label data-translate="treemarksApp.category.parent" for="field_parent">Parent</label>
             <select class="form-control" id="field_parent" multiple name="parent" ng-model="vm.category.parents" ng-options="category as category.name for category in vm.categories track by category.id"></select>
+        </div>
+        <div class="form-group">
+            <label data-translate="treemarksApp.category.owner" for="field_owner">Owner</label>
+            <select class="form-control" id="field_owner" name="owner" ng-model="vm.category.owner" ng-options="user as user.login for user in vm.users track by user.id" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div ng-show="editForm.owner.$invalid">
+            <p class="help-block"
+                ng-show="editForm.owner.$error.required" data-translate="entity.validation.required">
+                This field is required.
+            </p>
         </div>
     </div>
     <div class="modal-footer">

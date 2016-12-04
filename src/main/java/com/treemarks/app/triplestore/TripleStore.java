@@ -3,6 +3,7 @@ package com.treemarks.app.triplestore;
 import com.treemarks.app.domain.Category;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.repository.Repository;
@@ -20,6 +21,8 @@ import javax.annotation.PreDestroy;
 @Component
 public class TripleStore {
 
+    private static final String IRI_BASE = "http://kransen.nl/jeroen/ontologies/treemarks/";
+
     private Repository repo1;
     private ValueFactory vf;
     private IRI categoryTypeIri;
@@ -35,7 +38,7 @@ public class TripleStore {
             throw new ExceptionInInitializerError("Could not open remote repository: " + serverURL + "/" + identity);
         }
         vf = this.repo1.getValueFactory();
-        categoryTypeIri = vf.createIRI("http://kransen.nl/jeroen/ontologies/treemarks#Category");
+        categoryTypeIri = vf.createIRI(IRI_BASE + "Category");
     }
 
     @PreDestroy
@@ -44,8 +47,11 @@ public class TripleStore {
 
     public void saveCategory(Category category) {
         RepositoryConnection conn = repo1.getConnection();
-        IRI categoryIri = vf.createIRI(category.getUri());
+        IRI categoryIri = vf.createIRI(category.getIri());
         conn.add(categoryIri, RDF.TYPE, categoryTypeIri, categoryIri);
+        IRI ownerIRI = vf.createIRI(IRI_BASE + "users/" + category.getOwner().getLogin());
+        conn.add(ownerIRI, RDF.TYPE, FOAF.PERSON); // global context to avoid repeating statement
+        conn.add(categoryIri, DCTERMS.CREATOR, ownerIRI, categoryIri);
         conn.close();
     }
 }

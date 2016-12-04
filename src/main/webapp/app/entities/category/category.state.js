@@ -106,6 +106,7 @@
                             return {
                                 uri: null,
                                 name: null,
+                                iri: null,
                                 id: null
                             };
                         }

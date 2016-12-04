@@ -3,6 +3,7 @@ package com.treemarks.app.web.rest;
 import com.treemarks.app.TreemarksApp;
 
 import com.treemarks.app.domain.Category;
+import com.treemarks.app.domain.User;
 import com.treemarks.app.repository.CategoryRepository;
 import com.treemarks.app.service.CategoryService;
 
@@ -44,6 +45,9 @@ public class CategoryResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_IRI = "AAAAAAAAAA";
+    private static final String UPDATED_IRI = "BBBBBBBBBB";
+
     @Inject
     private CategoryRepository categoryRepository;
 
@@ -82,7 +86,13 @@ public class CategoryResourceIntTest {
     public static Category createEntity(EntityManager em) {
         Category category = new Category()
                 .uri(DEFAULT_URI)
-                .name(DEFAULT_NAME);
+                .name(DEFAULT_NAME)
+                .iri(DEFAULT_IRI);
+        // Add required entity
+        User owner = UserResourceIntTest.createEntity(em);
+        em.persist(owner);
+        em.flush();
+        category.setOwner(owner);
         return category;
     }
 
@@ -109,6 +119,7 @@ public class CategoryResourceIntTest {
         Category testCategory = categories.get(categories.size() - 1);
         assertThat(testCategory.getUri()).isEqualTo(DEFAULT_URI);
         assertThat(testCategory.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCategory.getIri()).isEqualTo(DEFAULT_IRI);
     }
 
     @Test
@@ -149,6 +160,24 @@ public class CategoryResourceIntTest {
 
     @Test
     @Transactional
+    public void checkIriIsRequired() throws Exception {
+        int databaseSizeBeforeTest = categoryRepository.findAll().size();
+        // set the field null
+        category.setIri(null);
+
+        // Create the Category, which fails.
+
+        restCategoryMockMvc.perform(post("/api/categories")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(category)))
+            .andExpect(status().isBadRequest());
+
+        List<Category> categories = categoryRepository.findAll();
+        assertThat(categories).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCategories() throws Exception {
         // Initialize the database
         categoryRepository.saveAndFlush(category);
@@ -159,7 +188,8 @@ public class CategoryResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(category.getId().intValue())))
             .andExpect(jsonPath("$.[*].uri").value(hasItem(DEFAULT_URI.toString())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].iri").value(hasItem(DEFAULT_IRI.toString())));
     }
 
     @Test
@@ -174,7 +204,8 @@ public class CategoryResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(category.getId().intValue()))
             .andExpect(jsonPath("$.uri").value(DEFAULT_URI.toString()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.iri").value(DEFAULT_IRI.toString()));
     }
 
     @Test
@@ -197,7 +228,8 @@ public class CategoryResourceIntTest {
         Category updatedCategory = categoryRepository.findOne(category.getId());
         updatedCategory
                 .uri(UPDATED_URI)
-                .name(UPDATED_NAME);
+                .name(UPDATED_NAME)
+                .iri(UPDATED_IRI);
 
         restCategoryMockMvc.perform(put("/api/categories")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -210,6 +242,7 @@ public class CategoryResourceIntTest {
         Category testCategory = categories.get(categories.size() - 1);
         assertThat(testCategory.getUri()).isEqualTo(UPDATED_URI);
         assertThat(testCategory.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCategory.getIri()).isEqualTo(UPDATED_IRI);
     }
 
     @Test

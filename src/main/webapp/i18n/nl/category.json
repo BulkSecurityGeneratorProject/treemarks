@@ -18,7 +18,9 @@
             },
             "uri": "Uri",
             "name": "Name",
-            "parent": "Parent"
+            "iri": "Iri",
+            "parent": "Parent",
+            "owner": "Owner"
         }
     }
 }

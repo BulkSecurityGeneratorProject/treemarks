@@ -12,11 +12,19 @@
         <dd>
             <span>{{vm.category.name}}</span>
         </dd>
+        <dt><span data-translate="treemarksApp.category.iri">Iri</span></dt>
+        <dd>
+            <span>{{vm.category.iri}}</span>
+        </dd>
         <dt><span data-translate="treemarksApp.category.parent">Parent</span></dt>
         <dd>
             <span ng-repeat="parent in vm.category.parents">
                 <a ui-sref="category-detail({id: parent.id})">{{parent.name}}</a>{{$last ? '' : ', '}}
             </span>
+        </dd>
+        <dt><span data-translate="treemarksApp.category.owner">Owner</span></dt>
+        <dd>
+            {{vm.category.owner.login}}
         </dd>
     </dl>
 

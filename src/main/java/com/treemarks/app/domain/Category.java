@@ -32,12 +32,21 @@ public class Category implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotNull
+    @Pattern(regexp = "^.+:.+$")
+    @Column(name = "iri", nullable = false)
+    private String iri;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "category_parent",
                joinColumns = @JoinColumn(name="categories_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="parents_id", referencedColumnName="ID"))
     private Set<Category> parents = new HashSet<>();
+
+    @ManyToOne
+    @NotNull
+    private User owner;
 
     public Long getId() {
         return id;
@@ -73,6 +82,19 @@ public class Category implements Serializable {
         this.name = name;
     }
 
+    public String getIri() {
+        return iri;
+    }
+
+    public Category iri(String iri) {
+        this.iri = iri;
+        return this;
+    }
+
+    public void setIri(String iri) {
+        this.iri = iri;
+    }
+
     public Set<Category> getParents() {
         return parents;
     }
@@ -94,6 +116,19 @@ public class Category implements Serializable {
 
     public void setParents(Set<Category> categories) {
         this.parents = categories;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public Category owner(User user) {
+        this.owner = user;
+        return this;
+    }
+
+    public void setOwner(User user) {
+        this.owner = user;
     }
 
     @Override
@@ -122,6 +157,7 @@ public class Category implements Serializable {
             "id=" + id +
             ", uri='" + uri + "'" +
             ", name='" + name + "'" +
+            ", iri='" + iri + "'" +
             '}';
     }
 }

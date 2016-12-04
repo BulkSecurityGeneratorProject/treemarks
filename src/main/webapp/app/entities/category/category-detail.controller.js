@@ -5,9 +5,9 @@
         .module('treemarksApp')
         .controller('CategoryDetailController', CategoryDetailController);
 
-    CategoryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Category'];
+    CategoryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Category', 'User'];
 
-    function CategoryDetailController($scope, $rootScope, $stateParams, previousState, entity, Category) {
+    function CategoryDetailController($scope, $rootScope, $stateParams, previousState, entity, Category, User) {
         var vm = this;
 
         vm.category = entity;
